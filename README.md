@@ -51,11 +51,11 @@ The function returns a list of rules, contained in namedtuples: `Rule = namedtup
 
 The itemset contains the input token ids, ans is the answer id, sup and conf are the support and the confidence of this rule.
 
-#### rule_match
+#### match_rules
 
 We provide a function to get, for each example in your dataset, all rules matching its input.
 
-`match_rule(dataset, rules, answers=None, bsize=500)`
+`match_rules(dataset, rules, answers=None, bsize=500)`
 
 This will return `(matching_rules, correct_rules)`, where `matching_rules` is a list of the same length as the dataset, giving for each example, the matching rules. 
 
