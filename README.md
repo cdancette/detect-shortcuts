@@ -36,7 +36,7 @@ python -m multimodal vqa2-eval -p logs/vqa2/rules_predictions.json --split val
 #### fit
 You can use our library to extract rule for any other dataset.
 
-To do so, you can use the `fit` function in our `rule_mining.py``
+To do so, you can use the `fit` function in our `rule_mining.py`
 It takes the following arguments : 
 `fit(dataset, answer_ids, gminer_support=0.01, gminer_max_length=0, gminer_path=None)`, where : 
 
