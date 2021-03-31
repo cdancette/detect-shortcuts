@@ -5,7 +5,7 @@
 This repo contains the rule mining pipeline described in the article : 
 Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Question Answering.
 
-This code was developped with python 3.7 and pytorch 1.7.0, but might work for other versions.
+This code was developped with python 3.7 and pytorch 1.7.0.
 
 ## Usage
 
