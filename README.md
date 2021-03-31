@@ -3,11 +3,14 @@
 This repo contains the rule mining pipeline described in the article : 
 Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Question Answering.
 
+This code was developped with python 3.7 and pytorch 1.7.0, but might work for other versions.
+
 ## Usage
 
-### Installing gminer
+### Installing requirements
 First, you need to install gminer. Follow instructions at https://github.com/cdancette/GMiner.
 
+For python requirements, run `pip install -r requirements.txt`. This will install pytorch, numpy and tqdm.
 ### Visual Question Answering (VQA)
 
 #### Download VQA and COCO data

@@ -1,20 +1,7 @@
-from collections import defaultdict
-from typing import Dict
-from bootstrap.lib.logger import Logger
 from itertools import combinations
-import json
-import pickle
-import torch
 from tqdm import tqdm
-import os
-from statistics import mean
-import tempfile
-import subprocess
-import numpy as np
 
 qid_to_annot = dict()
-
-
 
 def superset_filtering(rules):
     """
@@ -49,7 +36,7 @@ def superset_filtering(rules):
                         break
         if not discard_rule:
             rules.append(rule)
-    Logger()(
+    print(
         f"After discarding rules, going from {len(rules_sorted)} to {len(rules)} rules."
     )
     return rules

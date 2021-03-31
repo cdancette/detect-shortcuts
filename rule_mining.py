@@ -1,12 +1,12 @@
 import os
-from os import path as osp
 from collections import namedtuple
 import sys
 import json
 from typing import List
 from tempfile import TemporaryDirectory
-import numpy as np
+
 from tqdm import tqdm
+import numpy as np
 import torch
 
 from rule_utils import superset_filtering
@@ -25,7 +25,7 @@ def run_gminer(transactions, support, max_length=0, gminer_path=None):
 
         # convert trans_by_ans to GMiner format
         print("Converting transactions to GMiner input format")
-        if not osp.exists(path_gminer_in):
+        if not os.path.exists(path_gminer_in):
             with open(path_gminer_in, "w") as f:
                 for trans in tqdm(transactions):
                     trans = " ".join([str(x) for x in trans])
@@ -88,8 +88,6 @@ def fit(
     transactions = [
         items + [ans_id] for (items, ans_id) in zip(dataset, answer_ids)
     ]
-
-    # path_out = osp.join(dir_exp, f"all-rules.pth",)
 
     print(f"Minimum number of examples per rule: {gminer_support * len(transactions)}")
 
