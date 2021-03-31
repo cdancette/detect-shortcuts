@@ -1,6 +1,7 @@
-# Rule-Mining for shortcut discovery
 
 <img src="https://user-images.githubusercontent.com/10550327/113133375-dc253700-921f-11eb-81fb-73726dd377d4.png" width="300px">
+
+# Rule-Mining for shortcut discovery
 
 
 This repo contains the rule mining pipeline described in the article : 
