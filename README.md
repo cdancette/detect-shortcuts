@@ -7,6 +7,9 @@ Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Q
 
 This code was developped with python 3.7 and pytorch 1.7.0.
 
+The counterexamples subset can be downloaded here : https://github.com/cdancette/detect-shortcuts/releases/download/v1.0/counterexamples.json
+It countains the list of question_id for the VQA v2 validation set.
+
 ## Usage
 
 ### Installing requirements
