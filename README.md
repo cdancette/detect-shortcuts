@@ -1,5 +1,5 @@
 
-# Rule-Mining for shortcut discovery. (VQA-CE)
+# Rule-Mining for shortcut discovery (VQA-CE)
 
 
 This repo contains the rule mining pipeline described in the article : 
