@@ -167,7 +167,6 @@ def match_rules(
         dataset: list of list of token ids
         rules (List[Rule]): list of Rules
         answers: List[int]
-
     """
     # filling transaction matrix
     max_word_id = max(max(d) for d in dataset)

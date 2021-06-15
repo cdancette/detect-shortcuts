@@ -19,7 +19,7 @@ def loadjson(path):
 
 def create_dataset(
     questions,
-    visual_words="data/coco/image_to_detection.json",
+    visual_words="data/image_to_detection.json",
     annotations=None,
     textual=True,
     visual=True,
@@ -36,9 +36,6 @@ def create_dataset(
     transactions = []
     answers = []
     indexes = []
-
-    # if annotations is not None:
-        # answers = [a["multiple_choice_answer"] for a in annotations]
 
     skipped = 0
 
@@ -78,7 +75,7 @@ def create_dataset(
         indexes.append(i)
         if annotations is not None:
             answers.append(annotations[i]["multiple_choice_answer"])
-    
+
     print("skipped:", skipped, "/", total_len)
     assert len(transactions) == len(answers)
 
@@ -112,12 +109,15 @@ def vqa(
     max_length=5,
     version="vqa2",
     save_dir=None,
+    visual_words="data/image_to_detection.json",
 ):
 
     train_questions = loadjson(
-        "data/vqa2/v2_OpenEnded_mscoco_train2014_questions.json")["questions"]
-    train_annotations = loadjson(
-        "data/vqa2/v2_mscoco_train2014_annotations.json")["annotations"]
+        "data/vqa2/v2_OpenEnded_mscoco_train2014_questions.json"
+    )["questions"]
+    train_annotations = loadjson("data/vqa2/v2_mscoco_train2014_annotations.json")[
+        "annotations"
+    ]
 
     os.makedirs(save_dir, exist_ok=True)
     train_dataset, train_answers, train_indexes = create_dataset(
@@ -145,7 +145,7 @@ def vqa(
         train_answers_ids,
         gminer_support=support_gminer,
         gminer_max_length=max_length,
-        gminer_path=gminer_path
+        gminer_path=gminer_path,
     )
 
     # - keep only rules with confidence > min_conf
@@ -153,8 +153,7 @@ def vqa(
 
     # show the best 20 rules
     for r in rules[:20]:
-        print([tokens[tid] for tid in r.itemset],
-              all_answers[r.ans], r.sup, r.conf)
+        print([tokens[tid] for tid in r.itemset], all_answers[r.ans], r.sup, r.conf)
 
     # match rules with examples
     matching_rules_train, matching_correct_rules_train = match_rules(
@@ -162,10 +161,12 @@ def vqa(
     )
 
     # val
-    val_questions = loadjson(
-        "data/vqa2/v2_OpenEnded_mscoco_val2014_questions.json")["questions"]
-    val_annotations = loadjson(
-        "data/vqa2/v2_mscoco_val2014_annotations.json")["annotations"]
+    val_questions = loadjson("data/vqa2/v2_OpenEnded_mscoco_val2014_questions.json")[
+        "questions"
+    ]
+    val_annotations = loadjson("data/vqa2/v2_mscoco_val2014_annotations.json")[
+        "annotations"
+    ]
     val_dataset, val_answers, val_indexes = create_dataset(
         val_questions,
         annotations=val_annotations,
@@ -202,11 +203,8 @@ def vqa(
         else:
             qid_easy.append(annot["question_id"])
 
-    # extract predictions on validation set
-    # keep only one correct rule per training example
-    val_questions = loadjson("data/vqa2/v2_OpenEnded_mscoco_val2014_questions.json")[
-        "questions"
-    ]
+    # keep_rules:
+    # we keep only one correct rule per training example
     keep_rules = set()
     for rs in matching_correct_rules_train:
         if rs:
@@ -222,7 +220,7 @@ def vqa(
         else:
             ans = "yes"
         predictions.append(
-            {"question_id": qid, "answer": ans, }
+            {"question_id": qid, "answer": ans,}
         )
 
     # save predictions and rules
@@ -252,8 +250,7 @@ if __name__ == "__main__":
     parser.add_argument("--visual_words", default="data/image_to_detection.json")
     args = parser.parse_args()
 
-    (
-        rules, qid_easy, qid_counterexamples, qid_hard) = vqa(
+    (rules, qid_easy, qid_counterexamples, qid_hard) = vqa(
         support_gminer=args.support,
         max_length=args.max_length,
         min_conf=args.min_conf,
