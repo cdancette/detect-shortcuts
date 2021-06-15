@@ -140,7 +140,7 @@ def vqa(
 
     # match rules with examples
     matching_rules_train, matching_correct_rules_train = match_rules(
-        train_transactions, rules, answers=train_answers
+        train_transactions, rules, answers=train_answers_ids
     )
 
     # val
