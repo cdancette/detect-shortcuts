@@ -33,20 +33,30 @@ def create_dataset(
     tokenizer = get_tokenizer("basic_english")
 
     total_len = int(len(questions) * proportion)
-    transactions = [[] for _ in range(total_len)]
+    transactions = []
+    answers = []
+    indexes = []
+
+    # if annotations is not None:
+        # answers = [a["multiple_choice_answer"] for a in annotations]
+
+    skipped = 0
 
     #############
     # Regular textual
     #############
-    if textual:
-        print("Adding textual words")
-        for i in range(total_len):
-            tokens = tokenizer(questions[i]["question"])
-            transactions[i].extend(tokens)
+    for i in tqdm(range(total_len)):
+        transaction = []
 
-    if visual:
-        print("Adding visual words")
-        for i in range(total_len):
+        if textual:
+            # print("Adding textual words")
+            # for i in range(total_len):
+            tokens = tokenizer(questions[i]["question"])
+            transaction.extend(tokens)
+
+        if visual:
+            # print("Adding visual words")
+            # for i in range(total_len):
             image_id = str(questions[i]["image_id"])
             if image_id in visual_words:
                 vwords = visual_words[image_id]
@@ -59,30 +69,37 @@ def create_dataset(
                         if scores[i] >= visual_threshold
                     ]
                 classes = ["V_" + c for c in classes]  # visual marker
-                transactions[i].extend(classes)
+                transaction.extend(classes)
             else:
-                print(f"missing image {image_id}")
+                skipped += 1
+                continue
+
+        transactions.append(transaction)
+        indexes.append(i)
+        if annotations is not None:
+            answers.append(annotations[i]["multiple_choice_answer"])
+    
+    print("skipped:", skipped, "/", total_len)
+    assert len(transactions) == len(answers)
+
+    if annotations is not None and most_common_answers is not None:
+        occurences = Counter(answers).most_common(most_common_answers)
+        keep_answers = set(a for (a, _) in occurences)
+
+        new_transactions = []
+        new_answers = []
+        new_indexes = []
+        for k in range(len(transactions)):
+            if answers[k] in keep_answers:
+                new_transactions.append(transactions[k])
+                new_answers.append(answers[k])
+                new_indexes.append(indexes[k])
+        transactions, answers, indexes = new_transactions, new_answers, new_indexes
 
     if annotations is not None:
-        # TODO: answer processing
-        print("loading answers")
-        # annotations = loadjson(path_annotations)["annotations"]
-        answers = [a["multiple_choice_answer"] for a in annotations]
-        if most_common_answers is not None:
-            occurences = Counter(answers).most_common(3000)
-            keep_answers = set(a for (a, _) in occurences)
+        return transactions, answers, indexes
 
-            # filter out
-            new_transactions = []
-            new_answers = []
-            for i in range(len(transactions)):
-                if answers[i] in keep_answers:
-                    new_transactions.append(transactions[i])
-                    new_answers.append(answers[i])
-            transactions, answers = new_transactions, new_answers
-        return transactions, answers
-
-    return transactions
+    return transactions, indexes
 
 
 def vqa(
@@ -103,7 +120,7 @@ def vqa(
         "data/vqa2/v2_mscoco_train2014_annotations.json")["annotations"]
 
     os.makedirs(save_dir, exist_ok=True)
-    train_dataset, train_answers = create_dataset(
+    train_dataset, train_answers, train_indexes = create_dataset(
         train_questions,
         annotations=train_annotations,
         proportion=1.0,
@@ -111,6 +128,7 @@ def vqa(
         textual=textual,
         visual=visual,
         visual_threshold=visual_threshold,
+        visual_words=visual_words,
     )
     tokens = list(set(t for transaction in train_dataset for t in transaction))
     token_to_id = {t: i for (i, t) in enumerate(tokens)}
@@ -148,13 +166,14 @@ def vqa(
         "data/vqa2/v2_OpenEnded_mscoco_val2014_questions.json")["questions"]
     val_annotations = loadjson(
         "data/vqa2/v2_mscoco_val2014_annotations.json")["annotations"]
-    val_dataset, val_answers = create_dataset(
+    val_dataset, val_answers, val_indexes = create_dataset(
         val_questions,
         annotations=val_annotations,
         proportion=1.0,
         textual=textual,
         visual=visual,
         visual_threshold=visual_threshold,
+        visual_words=visual_words,
     )
 
     val_transactions = [
@@ -196,7 +215,7 @@ def vqa(
     # build predictions on validation set.
     predictions = []
     for i, rs in enumerate(matching_rules_val):
-        qid = val_questions[i]["question_id"]
+        qid = val_questions[val_indexes[i]]["question_id"]
         rs = [r for r in rs if r in keep_rules]
         if rs:
             ans = all_answers[rs[0].ans]
@@ -230,6 +249,7 @@ if __name__ == "__main__":
     parser.add_argument("--max_length", default=5, type=int)
     parser.add_argument("--min_conf", default=0.3, type=float)
     parser.add_argument("--gminer_path")
+    parser.add_argument("--visual_words", default="data/image_to_detection.json")
     args = parser.parse_args()
 
     (
@@ -239,4 +259,5 @@ if __name__ == "__main__":
         min_conf=args.min_conf,
         save_dir=args.save_dir,
         gminer_path=args.gminer_path,
+        visual_words=args.visual_words,
     )
