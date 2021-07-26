@@ -243,7 +243,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--save_dir", required=True)
-    parser.add_argument("--support", default=2.0e-5, type=float)
+    parser.add_argument("--support", default=2.1e-5, type=float)
     parser.add_argument("--max_length", default=5, type=int)
     parser.add_argument("--min_conf", default=0.3, type=float)
     parser.add_argument("--gminer_path")
