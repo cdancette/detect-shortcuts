@@ -3,7 +3,8 @@
 
 
 This repo contains the rule mining pipeline described in the article : 
-Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Question Answering (https://arxiv.org/abs/2104.03149).
+**Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Question Answering** by Corentin Dancette, Rémi Cadène, Damien Teney and 
+Matthieu Cord (https://arxiv.org/abs/2104.03149).
 It also provides the VQA-CE dataset.
 
 This code was developped with python 3.7 and pytorch 1.7.0.
