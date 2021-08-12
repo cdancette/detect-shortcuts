@@ -31,7 +31,7 @@ First, run `./download.sh`. Data will be downloaded in the `./data` directory.
 #### Run the rule mining pipeline
 
 Then run `python vqa.py --gminer_path <path_to_gminer>` to run our pipeline on the VQA v2 dataset.
-You can change the parameters, see the end of the `vqa.py` file. 
+You can change the parameters, see the end of the `vqa.py` file or run `python vqa.py --help`.
 
 This will save in logs/vqa2 various files containing the rules found in the dataset, 
 the question_ids for easy and counterexamples splits, and the predictions made by the rule model.
