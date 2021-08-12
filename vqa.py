@@ -60,16 +60,11 @@ def create_dataset(
                     ]
                 classes = ["V_" + c for c in classes]  # visual marker
                 transaction.extend(classes)
-            else:
-                skipped += 1
-                continue
-
         transactions.append(transaction)
         indexes.append(i)
         if annotations is not None:
             answers.append(annotations[i]["multiple_choice_answer"])
 
-    print("skipped:", skipped, "/", total_len)
     assert len(transactions) == len(answers)
 
     if annotations is not None and most_common_answers is not None:
