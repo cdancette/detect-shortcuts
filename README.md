@@ -1,6 +1,8 @@
 
 # Rule-Mining for shortcut discovery (VQA-CE)
 
+<img width="1477" alt="vqa-ce" src="https://user-images.githubusercontent.com/10550327/132852024-0dac6c04-3854-4007-a4b8-6017b2496ecd.png">
+
 
 This repo contains the rule mining pipeline described in the article : 
 **Beyond Question-Based Biases: Assessing Multimodal Shortcut Learning in Visual Question Answering** by Corentin Dancette, Rémi Cadène, Damien Teney and 
