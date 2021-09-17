@@ -9,6 +9,8 @@ This repo contains the rule mining pipeline described in the article :
 Matthieu Cord (https://arxiv.org/abs/2104.03149).
 It also provides the VQA-CE dataset.
 
+Website here: https://cdancette.fr/projects/vqa-ce/
+
 This code was developped with python 3.7 and pytorch 1.7.0.
 
 ### VQA-CE
