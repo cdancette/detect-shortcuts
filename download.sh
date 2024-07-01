@@ -10,4 +10,4 @@ rm *mscoco.zip
 
 mkdir -p ../data/coco
 cd ../data/coco
-wget https://webia.lip6.fr/~dancette/shortcut-detection/image_to_detection.json
+wget https://github.com/cdancette/detect-shortcuts/releases/download/v1.0/image_to_detection.json
